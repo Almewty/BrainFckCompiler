@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Emit;
 
 namespace bf
 {
@@ -11,7 +12,7 @@ namespace bf
 
         private static void Main (string[] args)
         {
-            string code = @"[,.";
+            string code = @",[.,]";
 
             var band = Expression.Parameter(typeof(int[]), "band");
             var index = Expression.Parameter(typeof(int), "index");
@@ -74,9 +75,15 @@ namespace bf
 
             //Console.WriteLine(block.ToString());
 
-            var action = Expression.Lambda<Action>(block).Compile();
+            var ass = AssemblyBuilder.DefineDynamicAssembly(new System.Reflection.AssemblyName("CompiledBf"), AssemblyBuilderAccess.Save);
+            var mod = ass.DefineDynamicModule("test", "test.exe");
+            var tb = mod.DefineType("BF");
+            var mb = tb.DefineMethod("Exec", System.Reflection.MethodAttributes.Public | System.Reflection.MethodAttributes.Static);
+            /*var action = */Expression.Lambda<Action>(block).CompileToMethod(mb);
+            ass.Save("test.exe");
+            
 
-            action();
+            //action();
 
             Console.ReadKey();
 
