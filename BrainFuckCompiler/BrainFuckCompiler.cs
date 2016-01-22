@@ -26,6 +26,8 @@ namespace BrainFuck.Compiler
 
         #endregion Private Fields
 
+        #region Public Constructors
+
         static BrainFuckCompiler()
         {
             Band = Expression.Parameter(typeof(int[]), "band");
@@ -41,6 +43,8 @@ namespace BrainFuck.Compiler
             ReadChar = Expression.Call(null, typeof(Console).GetMethod("Read"));
             ReadInt = Expression.Assign(AtIndex, ReadChar);
         }
+
+        #endregion Public Constructors
 
         #region Public Methods
 

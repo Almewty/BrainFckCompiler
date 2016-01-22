@@ -1,14 +1,11 @@
 ﻿using ManyConsole;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BrainFuck.Compiler
 {
     public class ProcessFileCommand : ConsoleCommand
     {
+        #region Public Constructors
+
         public ProcessFileCommand()
         {
             IsCommand("run", "run brainfuck code");
@@ -16,10 +13,16 @@ namespace BrainFuck.Compiler
             HasAdditionalArguments(1, "<code>");
         }
 
+        #endregion Public Constructors
+
+        #region Public Methods
+
         public override int Run(string[] remainingArguments)
         {
             BrainFuckCompiler.Run(remainingArguments[0]);
             return 0;
         }
+
+        #endregion Public Methods
     }
 }
