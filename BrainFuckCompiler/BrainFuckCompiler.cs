@@ -11,20 +11,36 @@ namespace BrainFuck.Compiler
     {
         #region Private Fields
 
-        private static Expression AtIndex = Expression.ArrayAccess(Band, Index);
-        private static Expression AtIndexChar = Expression.Convert(AtIndex, typeof(Char));
-        private static Expression Band = Expression.Parameter(typeof(int[]), "band");
-        private static Expression BandInit = Expression.Assign(Band, Expression.NewArrayBounds(typeof(int), Expression.Constant(5000)));
-        private static Expression DecBand = Expression.PreDecrementAssign(AtIndex);
-        private static Expression DecIndex = Expression.PreDecrementAssign(Index);
-        private static Expression IncBand = Expression.PreIncrementAssign(AtIndex);
-        private static Expression IncIndex = Expression.PreIncrementAssign(Index);
-        private static Expression Index = Expression.Parameter(typeof(int), "index");
-        private static Expression PrintBand = Expression.Call(null, typeof(Console).GetMethod("Write", new[] { typeof(Char) }), AtIndexChar);
-        private static Expression ReadChar = Expression.Call(null, typeof(Console).GetMethod("Read"));
-        private static Expression ReadInt = Expression.Assign(AtIndex, ReadChar);
+        private static Expression AtIndex;
+        private static Expression AtIndexChar;
+        private static ParameterExpression Band;
+        private static Expression BandInit;
+        private static Expression DecBand;
+        private static Expression DecIndex;
+        private static Expression IncBand;
+        private static Expression IncIndex;
+        private static ParameterExpression Index;
+        private static Expression PrintBand;
+        private static Expression ReadChar;
+        private static Expression ReadInt;
 
         #endregion Private Fields
+
+        static BrainFuckCompiler()
+        {
+            Band = Expression.Parameter(typeof(int[]), "band");
+            BandInit = Expression.Assign(Band, Expression.NewArrayBounds(typeof(int), Expression.Constant(5000)));
+            Index = Expression.Parameter(typeof(int), "index");
+            AtIndex = Expression.ArrayAccess(Band, Index);
+            AtIndexChar = Expression.Convert(AtIndex, typeof(Char));
+            DecBand = Expression.PreDecrementAssign(AtIndex);
+            DecIndex = Expression.PreDecrementAssign(Index);
+            IncBand = Expression.PreIncrementAssign(AtIndex);
+            IncIndex = Expression.PreIncrementAssign(Index);
+            PrintBand = Expression.Call(null, typeof(Console).GetMethod("Write", new[] { typeof(Char) }), AtIndexChar);
+            ReadChar = Expression.Call(null, typeof(Console).GetMethod("Read"));
+            ReadInt = Expression.Assign(AtIndex, ReadChar);
+        }
 
         #region Public Methods
 
@@ -112,7 +128,7 @@ namespace BrainFuck.Compiler
                         break;
                 }
             }
-            var block = Expression.Block(new[] { Band, Index }.Concat(commands));
+            var block = Expression.Block(new[] { Band, Index }, commands);
             return Expression.Lambda<Action>(block);
         }
 
