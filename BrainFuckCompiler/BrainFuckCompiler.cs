@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -66,7 +67,7 @@ namespace BrainFuck.Compiler
             var action = CompileToLambda(code);
             var assembly = AssemblyBuilder.DefineDynamicAssembly(
                 new AssemblyName(options.AssemblyName), AssemblyBuilderAccess.Save);
-            var module = assembly.DefineDynamicModule(options.ModuleName);
+            var module = assembly.DefineDynamicModule(options.ModuleName, Path.GetFileName(path));
             var type = module.DefineType(options.TypeName);
             var method = type.DefineMethod(options.MethodName, MethodAttributes.Public | MethodAttributes.Static);
             action.CompileToMethod(method);
