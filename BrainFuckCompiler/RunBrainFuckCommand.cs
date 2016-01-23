@@ -1,5 +1,4 @@
 ﻿using ManyConsole;
-using System.IO;
 
 namespace BrainFuck.Compiler
 {
@@ -9,9 +8,9 @@ namespace BrainFuck.Compiler
 
         public RunBrainFuckCommand()
         {
-            IsCommand("file", "input file");
+            IsCommand("run", "run brainfuck");
 
-            HasAdditionalArguments(1, "<filename>");
+            HasAdditionalArguments(1, "<code>");
         }
 
         #endregion Public Constructors
@@ -20,7 +19,7 @@ namespace BrainFuck.Compiler
 
         public override int Run(string[] remainingArguments)
         {
-            BrainFuckCompiler.Run(File.ReadAllText(remainingArguments[0]));
+            BrainFuckCompiler.Run(remainingArguments[0]);
             return 0;
         }
 
